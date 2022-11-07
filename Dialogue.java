@@ -1,5 +1,6 @@
 import java.io.Console;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -11,10 +12,36 @@ public class Dialogue {
 "--------------------------------------------------------------------------------\n";
 
 
-    Console input;
-    List<Verb> verbList;
-    List<String> errorList;
-    int errorCount;
+    private Console input;
+    private List<Verb> verbList;
+    private List<String> errorList;
+    private int errorCount;
+
+    private String[] loadout1 = {
+        "avoir"  ,
+        "être"   ,
+        "prendre",
+        "faire"  ,
+        "aller"  ,
+        "mettre" ,
+        "vouloir"
+    };
+    private String[] loadout2 = {
+        "essayer"  ,
+        "apprendre",
+        "pouvoir"  ,
+        "devoir"   ,
+        "boire"    ,
+        "venir"    ,
+        "connaître"
+    };
+
+    private String[][] loadouts = {
+        null,
+        loadout1,
+        loadout2
+    };
+
 
     public Dialogue(){
         verbList = new ArrayList<>();
@@ -22,28 +49,42 @@ public class Dialogue {
         input = System.console();
     }
     public void start(){
-        System.out.println("Choose Loadout");
-        switch (input.readLine()){
-            case "1":
-                loadout1();
-                System.out.println("Loadout 1 chosen.\n");
-                break;
+        System.out.println("Please type in loadout number\n");
 
-            case "2":
-                loadout2();
-                System.out.println("Loadout 2 chosen.\n");
-                break;
-
-            case "1 & 2":
-                loadout1();
-                loadout2();
-                System.out.println("Loadout 1 and 2 chosen.\n");
-                break;
-
-            default:
-                fillYourself();
-                break;
+        for (int i = 1; i < loadouts.length; i++){
+            System.out.println("Loadout " + i);
+            printLoadout(loadouts[i]);
+            System.out.println();
         }
+
+        boolean inputRecognized = false;
+        while (!inputRecognized){
+            switch (input.readLine()){
+                case "1":
+                    applyLoadout(loadout1);
+                    System.out.println("Loadout 1 chosen.\n");
+                    inputRecognized = true;
+                    break;
+    
+                case "2":
+                    applyLoadout(loadout2);
+                    System.out.println("Loadout 2 chosen.\n");
+                    inputRecognized = true;
+                    break;
+    
+                // case "1 & 2":
+                //     applyLoadout(loadout1);
+                //     applyLoadout(loadout2);
+                //     System.out.println("Loadout 1 and 2 chosen.\n");
+                //     break;
+    
+                default:
+                    // fillYourself();
+                    System.out.println("Loadout not recognized");
+                    break;
+            }
+        }
+        
 
         Collections.shuffle(verbList);
         for (int i = 0; i < verbList.size() * 6; i++){
@@ -57,25 +98,17 @@ public class Dialogue {
             System.out.println(error);
         }
     }
-    private void loadout1() {
-        addToVerbList("avoir");
-        addToVerbList("être");
-        addToVerbList("prendre");
-        addToVerbList("faire");
-        addToVerbList("aller");
-        addToVerbList("mettre");
-        addToVerbList("vouloir");
-    }
-    private void loadout2() {
-        addToVerbList("apprendre");
-        addToVerbList("essayer");
-        addToVerbList("pouvoir");
-        addToVerbList("devoir");
-        addToVerbList("boire");
-        addToVerbList("venir");
-        addToVerbList("connaître");
+    private void applyLoadout(String[] loadout) {
+        for (String verb : loadout){
+            addToVerbList(verb);
+        }
     }
 
+    private void printLoadout(String[] loadout) {
+        for (String verb : loadout){
+            System.out.print(verb+", ");
+        }
+    }
 
     private void fillYourself() {
         for (int i = 1; i < 8; i++){
@@ -140,15 +173,15 @@ public class Dialogue {
         String infinitive = verbList.get(verb).getConjugation(0);
         System.out.println((i+1) + "." + infinitive);
         int person = i % 6 + 1;
-        System.out.print(printPerson(person));
+        System.out.print("  " + printPerson(person));
         String givenAnswer = input.readLine();
         String correctAnswer = verbList.get(verb).getConjugation(person);
-        if (givenAnswer.equals(correctAnswer)){
-            System.out.println("Correct!\n");
+        if (answerIsCorrect(givenAnswer, correctAnswer)){
+            System.out.println("  Correct!\n");
             return true;
         } else {
-            System.out.println("Wrong! The correct answer is "+correctAnswer+
-                ", not " + givenAnswer + "!\n");
+            System.out.println("  Wrong! The correct answer is \'"+correctAnswer+
+                "\', not \'" + givenAnswer + "\'!\n");
                 errorCount++;
                 String errorString = "- " + infinitive + "\n  " +
                     printPerson(person) + correctAnswer + "\n" +
@@ -158,6 +191,15 @@ public class Dialogue {
         }
     }
 
+    private boolean answerIsCorrect(String givenAnswer, String correctAnswer) {
+        if (correctAnswer.contains("/")){
+            String[] correctAnswers = correctAnswer.split("/");
+            List<String> correctAnswerList = Arrays.asList(correctAnswers);
+            return correctAnswerList.contains(givenAnswer);
+        } else {
+            return givenAnswer.equals(correctAnswer);
+        }
+    }
     private String printPerson(int person) {
         String result = "";
         switch (person){

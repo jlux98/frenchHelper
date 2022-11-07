@@ -5,12 +5,12 @@ public class Essayer extends Verb{
         super();
         String[] conjugations =  {
             "essayer",
-            "essaye",
-            "essayes",
-            "essaye",
+            "essaie/essaye",
+            "essaies/essayes",
+            "essaie/essaye",
             "essayons",
             "essayez",
-            "essayent"
+            "essaient/essayent"
         };
         super.setConjugations(conjugations);
     }
