@@ -1,16 +1,24 @@
 import java.io.Console;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import verbs.*;
 
 public class Dialogue {
 
+    private final static String line =
+"--------------------------------------------------------------------------------\n";
+
+
     Console input;
     List<Verb> verbList;
+    List<String> errorList;
+    int errorCount;
 
     public Dialogue(){
         verbList = new ArrayList<>();
+        errorList = new ArrayList<>();
         input = System.console();
     }
     public void start(){
@@ -18,20 +26,35 @@ public class Dialogue {
         switch (input.readLine()){
             case "1":
                 loadout1();
+                System.out.println("Loadout 1 chosen.\n");
                 break;
 
             case "2":
                 loadout2();
+                System.out.println("Loadout 2 chosen.\n");
+                break;
+
+            case "1 & 2":
+                loadout1();
+                loadout2();
+                System.out.println("Loadout 1 and 2 chosen.\n");
                 break;
 
             default:
                 fillYourself();
                 break;
         }
-        for (int i = 0; i < 42; i++){
+
+        Collections.shuffle(verbList);
+        for (int i = 0; i < verbList.size() * 6; i++){
             if (!askForConjugation(verbList, i)){
                 i--; // force the learner to type in the correct answer
             }
+        }
+
+        System.out.println(line + "Errors: " + errorCount + "\n");
+        for (String error : errorList){
+            System.out.println(error);
         }
     }
     private void loadout1() {
@@ -113,10 +136,11 @@ public class Dialogue {
         }
     }
     private boolean askForConjugation(List<Verb> verbList, int i) {
-        int verb = i % 7;
-        System.out.println(verbList.get(verb).getConjugation(0));
+        int verb = i % verbList.size();
+        String infinitive = verbList.get(verb).getConjugation(0);
+        System.out.println((i+1) + "." + infinitive);
         int person = i % 6 + 1;
-        printPerson(person);
+        System.out.print(printPerson(person));
         String givenAnswer = input.readLine();
         String correctAnswer = verbList.get(verb).getConjugation(person);
         if (givenAnswer.equals(correctAnswer)){
@@ -125,37 +149,42 @@ public class Dialogue {
         } else {
             System.out.println("Wrong! The correct answer is "+correctAnswer+
                 ", not " + givenAnswer + "!\n");
+                errorCount++;
+                String errorString = "- " + infinitive + "\n  " +
+                    printPerson(person) + correctAnswer + "\n" +
+                    "  Your answer: " + givenAnswer;
+                errorList.add(errorString);
             return false;
         }
     }
 
-    private void printPerson(int person) {
+    private String printPerson(int person) {
         String result = "";
         switch (person){
             case 1:
-                result = "1st Person Singular:\nje ";
+                result = "1st Person Singular:\n  je/j' ";
                 break;
             case 2:
-                result = "2nd Person Singular:\ntu ";
+                result = "2nd Person Singular:\n  tu ";
                 break;
             case 3:
-                result = "3rd Person Singular:\nil/elle/iel ";
+                result = "3rd Person Singular:\n  il/elle/iel ";
                 break;
             
             case 4:
-                result = "1st Person Plural:\nnous ";
+                result = "1st Person Plural:\n  nous ";
                 break;
             case 5:
-                result = "2nd Person Plural:\nvous ";
+                result = "2nd Person Plural:\n  vous ";
                 break;
             case 6:
-                result = "3rd Person Plural:\nils/elles/ielles ";
+                result = "3rd Person Plural:\n  ils/elles/ielles ";
                 break;
 
             default:
                 throw new IllegalArgumentException("Person not recognized");
         }
-        System.out.print(result);
+        return result;
     }
 
     public static void main(String[] args) {
