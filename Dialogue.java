@@ -97,6 +97,9 @@ public class Dialogue {
         for (String error : errorList){
             System.out.println(error);
         }
+
+        System.out.println("\nPress enter to close");
+        input.readLine();
     }
     private void applyLoadout(String[] loadout) {
         for (String verb : loadout){

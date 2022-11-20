@@ -4,13 +4,13 @@ public class Apprendre extends Verb {
     public Apprendre(){
         super();
         String[] conjugations =  {
-            "apprendre",
-            "apprends",
-            "apprends",
-            "apprend",
-            "apprenons",
-            "apprenez",
-            "apprennent"
+            "apprendre  ",  // infinitive   
+            "apprends   ",  // 1st person sg
+            "apprends   ",  // 2nd person sg
+            "apprend    ",  // 3rd person sg
+            "apprenons  ",  // 1st person pl
+            "apprenez   ",  // 2nd person pl
+            "apprennent "   // 3rd person   
         };
         super.setConjugations(conjugations);
     }
