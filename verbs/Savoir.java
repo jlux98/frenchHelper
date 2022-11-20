@@ -1,7 +1,9 @@
 package verbs;
 
 public class Savoir extends Verb {
-    super();
+
+    public Savoir() {
+        super();
         String[] conjugations =  {
             "savoir ",  // infinitive   
             "sais   ",  // 1st person sg
@@ -12,4 +14,6 @@ public class Savoir extends Verb {
             "savent "   // 3rd person   
         };
         super.setConjugations(conjugations);
+    }
+    
 }

@@ -36,10 +36,21 @@ public class Dialogue {
         "connaître"
     };
 
+    private String[] loadout3 = {
+        "courir"    ,
+        "envoyer"   ,
+        "finir"     ,
+        "sentir"    ,
+        "ouvrir"    ,
+        "recevoir"  ,
+        "savoir"
+    };
+
     private String[][] loadouts = {
         null,
         loadout1,
-        loadout2
+        loadout2,
+        loadout3
     };
 
 
@@ -138,10 +149,16 @@ public class Dialogue {
             case "connaître":
                 verbList.add(new Connaitre());
                 return true;
+            case "courir":
+                verbList.add(new Courir());
+                return true;
             case "devoir":
                 verbList.add(new Devoir());
                 return true;
-                case "essayer":
+            case "envoyer":
+                verbList.add(new Envoyer());
+                return true;
+            case "essayer":
                 verbList.add(new Essayer());
                 return true;
             case "être":
@@ -150,14 +167,29 @@ public class Dialogue {
             case "faire":
                 verbList.add(new Faire());
                 return true;
+            case "finir":
+                verbList.add(new Finir());
+                return true;
             case "mettre":
                 verbList.add(new Mettre());
                 return true;
-             case "pouvoir":
+            case "ouvrir":
+                verbList.add(new Ouvrir());
+                return true;
+            case "pouvoir":
                 verbList.add(new Pouvoir());
                 return true;
             case "prendre":
                 verbList.add(new Prendre());
+                return true;
+            case "recevoir":
+                verbList.add(new Recevoir());
+                return true;
+            case "savoir":
+                verbList.add(new Savoir());
+                return true;
+            case "sentir":
+                verbList.add(new Sentir());
                 return true;
             case "venir":
                 verbList.add(new Venir());
